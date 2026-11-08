@@ -429,7 +429,7 @@ async function typeInInput(text) {
   const k = speedK();
   if (k < .15) { it.textContent = text; }
   else {
-    const per = Math.min(28, 1600 / Math.max(1, text.length)) * k;
+    const per = Math.min(45, 2400 / Math.max(1, text.length)) * k;
     for (let i = 1; i <= text.length; i++) {
       it.innerHTML = esc(text.slice(0, i)) + '<span class="caret"></span>';
       if (i % 2 === 0) sfx('key');
@@ -454,7 +454,7 @@ async function sendMe(text) {
   clearInput();
   sfx('send');
   appendLive(conv, msg);
-  await sleep(450);
+  await sleep(700);
 }
 
 /* ---------------- EXÉCUTION ---------------- */
@@ -731,14 +731,28 @@ async function execMsg(s) {
     await sleep(900);
     return null;
   }
-  const typeMs = s.fast ? 300 : clamp(450 + text.length * 32, 800, 3000) + (s.slow ? 1500 : 0) + (msg.voice ? 1500 : 0);
+  // Rythme naturel :
+  // 1) l'autre lit / réfléchit avant de commencer à écrire (plus long s'il répond à un de nos messages),
+  // 2) "écrit…" dure en fonction de la longueur du message (~13 caractères par seconde), avec un peu d'aléatoire,
+  // 3) une pause après l'affichage, le temps que le joueur lise.
+  const jitter = () => 0.85 + Math.random() * 0.3;
+  const prevMsgs = G.st.convos[conv] || [];
+  const prev = prevMsgs[prevMsgs.length - 1];
+  const replying = prev && prev.who === 'me';
+  const sameSender = prev && prev.who === who;
+  let think = s.fast ? 150 : replying ? 900 + Math.min(1400, (prev.t || '').length * 18) : sameSender ? 350 : 650;
+  let typeMs = s.fast ? 450 : clamp(700 + text.length * 75, 1100, 6500);
+  if (msg.img) typeMs = s.fast ? 450 : 1600;
+  if (msg.voice) typeMs = 2200 + text.length * 30;
+  if (s.slow) typeMs += 1800;
+  await sleep(think * jitter());
   const tb = showTyping(who);
-  await sleep(typeMs);
+  await sleep(typeMs * jitter());
   hideTyping(tb);
   pushMsg(conv, msg);
   sfx('receive');
   appendLive(conv, msg);
-  await sleep(380 + Math.min(900, text.length * 10));
+  await sleep(clamp(500 + text.length * 22, 700, 2600));
   return null;
 }
 

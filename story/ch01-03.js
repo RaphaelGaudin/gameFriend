@@ -182,16 +182,16 @@ STORY.c1_sam = [
 STORY.c1_cafe = [
   { scene: 'cafe', loc: 'Le Comptoir Bleu · Croix-Rousse', amb: 'cafe', music: 'menu', particles: 'lights', time: '10:04' },
   "~ Elle est déjà là, assise près de la vitre, les deux mains autour d'une tasse trop grande.",
-  "~ Ses cheveux sont plus courts que dans ton souvenir. Elle te voit, et son visage s'allume.",
+  "~ Ses cheveux sont plus longs que dans ton souvenir. Elle te voit, et son visage s'allume.",
   "ines: {nom} ! Viens là.",
   "~ Elle te serre fort. Elle sent toujours la fleur d'oranger. Certaines choses ne changent pas.",
   "ines: T'as changé, toi. T'as... une barbe ? C'est une barbe, ça ?",
   { c: [
     { t: "C'est un projet en cours. Sois indulgente.", fx: { aff: 1 }, then: ["ines: Je valide le projet. Continue les travaux."] },
-    { t: "Toi t'as coupé tes cheveux. Ça te va trop bien.", fx: { aff: 1, fz: -1 }, then: [
+    { t: "Toi t'as laissé pousser tes cheveux. Ça te va trop bien.", fx: { aff: 1, fz: -1 }, then: [
       "~ Elle passe une main dans sa nuque, un peu gênée.",
-      "ines: Arrête... Léa a dit que je ressemblais à un champignon.",
-      "> Un très joli champignon.",
+      "ines: Arrête... Léa dit que j'ai une tête de sorcière qui s'est perdue.",
+      "> Une très jolie sorcière.",
       "ines: T'es nul. Merci.",
     ] },
     { t: "On commande ? Je meurs de faim.", then: ["ines: Toujours aussi romantique. Je t'ai pris un croissant."] },

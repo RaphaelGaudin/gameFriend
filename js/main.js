@@ -215,6 +215,13 @@
   const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   const standalone = window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
   if (isIOS && !standalone) $('#ios-hint').classList.add('show');
+  // Dans Safari (pas en app écran d'accueil), la page ne doit pas passer sous la barre d'état :
+  // Safari y applique un flou qui couperait l'en-tête et les photos.
+  if (!standalone) {
+    const vp = document.querySelector('meta[name=viewport]');
+    vp.setAttribute('content', vp.getAttribute('content').replace(/,\s*viewport-fit=cover/, ''));
+  }
+  document.documentElement.classList.toggle('standalone', standalone);
   if ('serviceWorker' in navigator && location.protocol.startsWith('http') && !G.auto) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }

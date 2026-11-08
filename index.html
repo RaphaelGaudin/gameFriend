@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lu à 23h12</title>
+<meta name="description" content="Un jeu narratif par SMS : une amitié, des choix, dix chapitres et sept fins.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== MENU ===== -->
+  <section id="menu" class="screen">
+    <div class="menu-bg"></div>
+    <div class="menu-inner">
+      <div class="logo">
+        <div class="logo-bubble">t'es réveillé ?</div>
+        <h1>Lu à <span>23h12</span></h1>
+        <p class="tagline">Six ans d'amitié. Un hiver pour tout dire.</p>
+      </div>
+      <nav class="menu-buttons">
+        <button data-act="new">Nouvelle partie</button>
+        <button data-act="continue" id="btn-continue">Continuer</button>
+        <button data-act="chapters">Chapitres</button>
+        <button data-act="endings">Fins <span id="end-count"></span></button>
+        <button data-act="options">Options</button>
+        <button data-act="credits">Crédits</button>
+      </nav>
+      <p class="hint">🎧 Jeu à jouer avec le son</p>
+    </div>
+  </section>
+
+  <!-- ===== JEU ===== -->
+  <section id="game" class="screen hidden">
+    <div id="topbar">
+      <button id="tb-menu" title="Menu">☰</button>
+      <div id="tb-chapter"></div>
+      <button id="tb-carnet" title="Carnet">♡</button>
+      <button id="tb-ff" title="Avance rapide">⏩</button>
+    </div>
+
+    <div id="phone">
+      <div class="statusbar"><span id="clock">23:12</span><span class="notch"></span><span class="sb-icons">▂▄▆ 5G ▮</span></div>
+
+      <!-- Conversation -->
+      <div id="chatview" class="view">
+        <header id="chathead">
+          <button id="btn-list" title="Conversations">‹<span id="unread-total"></span></button>
+          <div class="avatar" id="head-avatar"></div>
+          <div class="headinfo">
+            <div id="head-name"></div>
+            <div id="head-status"></div>
+          </div>
+          <div id="head-rel"></div>
+        </header>
+        <div id="thread"></div>
+        <div id="inputbar">
+          <div id="inputtext" class="ph">Message</div>
+          <button id="sendbtn">➤</button>
+        </div>
+      </div>
+
+      <!-- Liste des conversations -->
+      <div id="listview" class="view hidden">
+        <header class="listhead"><span>Messages</span><button id="btn-closelist">✕</button></header>
+        <div id="convlist"></div>
+        <div id="histview" class="hidden"><header class="listhead"><button id="btn-closehist">‹</button><span id="hist-name"></span><span></span></header><div id="histthread"></div></div>
+      </div>
+
+      <!-- Écran verrouillé -->
+      <div id="lockview" class="view hidden">
+        <div class="lock-time" id="lock-time">23:12</div>
+        <div class="lock-date" id="lock-date"></div>
+        <div id="notifs"></div>
+        <div class="lock-hint">Glisser pour déverrouiller</div>
+      </div>
+
+      <!-- Appel -->
+      <div id="callview" class="view hidden">
+        <div class="call-top">
+          <div class="avatar big" id="call-avatar"></div>
+          <div id="call-name"></div>
+          <div id="call-state"></div>
+        </div>
+        <div id="callsubs"></div>
+        <div class="call-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+
+      <div id="banner" class="hidden"></div>
+      <div id="choices" class="choices"></div>
+    </div>
+
+    <!-- Scène "vraie vie" -->
+    <div id="scene" class="hidden">
+      <div id="scene-bg"></div>
+      <div id="scene-particles"></div>
+      <div id="scene-loc"></div>
+      <div id="dialog">
+        <div id="speaker"></div>
+        <div id="line"></div>
+        <div class="next">▾</div>
+      </div>
+      <div id="scene-choices" class="choices"></div>
+    </div>
+
+    <!-- Narration -->
+    <div id="nar" class="hidden"><div id="nar-text"></div><div class="next">▾</div></div>
+
+    <!-- Carte de chapitre -->
+    <div id="chapcard" class="hidden">
+      <div class="cc-num" id="cc-num"></div>
+      <div class="cc-title" id="cc-title"></div>
+      <div class="cc-sub" id="cc-sub"></div>
+      <div class="cc-hint">Toucher pour continuer</div>
+    </div>
+
+    <!-- Récap -->
+    <div id="recap" class="hidden">
+      <div class="recap-box">
+        <h2 id="recap-title"></h2>
+        <ul id="recap-list"></ul>
+        <div id="recap-rel"></div>
+        <button id="recap-go">Continuer</button>
+      </div>
+    </div>
+
+    <!-- Fin -->
+    <div id="endscreen" class="hidden">
+      <div class="end-box">
+        <div class="end-label">Fin <span id="end-num"></span></div>
+        <h2 id="end-title"></h2>
+        <div id="end-text"></div>
+        <div id="end-stats"></div>
+        <div id="end-progress"></div>
+        <div class="end-buttons">
+          <button id="end-chapters">Revenir à un chapitre</button>
+          <button id="end-menu">Menu principal</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast"></div>
+  </section>
+
+  <!-- ===== PANNEAUX ===== -->
+  <div id="panel" class="hidden">
+    <div class="panel-box">
+      <button class="panel-close" id="panel-close">✕</button>
+      <div id="panel-content"></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/audio.js"></script>
+<script src="js/engine.js"></script>
+<script src="story/ch01-03.js"></script>
+<script src="story/ch04-06.js"></script>
+<script src="story/ch07-08.js"></script>
+<script src="story/ch09-10.js"></script>
+<script src="story/endings.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

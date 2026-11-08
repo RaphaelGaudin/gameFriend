@@ -12,6 +12,13 @@ python3 -m http.server 8000
 
 puis d'ouvrir <http://localhost:8000>. (Ouvrir `index.html` directement fonctionne aussi dans la plupart des navigateurs.)
 
+### Sur iPhone
+
+Le jeu est pensé pour l'iPhone. Une fois le dossier en ligne (GitHub Pages, Netlify…) :
+ouvre l'adresse dans Safari, touche **Partager** puis **Sur l'écran d'accueil**. Le jeu s'ouvre
+alors en plein écran comme une vraie app, garde ta progression et fonctionne même hors ligne.
+Sur iOS 16 et avant, coupe le mode silencieux pour entendre le son.
+
 🎧 À jouer avec le son : la musique et les bruitages sont générés en temps réel (Web Audio).
 
 ## Contenu

@@ -13,7 +13,11 @@ const SND = (() => {
     if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
+    // iOS 17+ : jouer même si le bouton silencieux est activé
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
     ctx = new AC();
+    // iOS : un buffer muet joué pendant le geste déverrouille l'audio
+    try { const sb = ctx.createBuffer(1, 1, 22050), src = ctx.createBufferSource(); src.buffer = sb; src.connect(ctx.destination); src.start(0); } catch (e) {}
     comp = ctx.createDynamicsCompressor();
     comp.threshold.value = -18; comp.ratio.value = 3;
     comp.connect(ctx.destination);
@@ -230,6 +234,14 @@ const SND = (() => {
     if (kind === 'music') { mus.gain.setTargetAtTime(mood ? v * .55 : 0.0001, ctx.currentTime, .2); amb.gain.setTargetAtTime(v * .7, ctx.currentTime, .2); }
     if (kind === 'sfx') sfx.gain.setTargetAtTime(v, ctx.currentTime, .1);
   }
+
+  // Couper le son quand l'app passe en arrière-plan (verrouillage, changement d'app)
+  document.addEventListener('visibilitychange', () => {
+    if (!ctx) return;
+    if (document.hidden) ctx.suspend(); else ctx.resume();
+  });
+  // Safari iOS peut repasser le contexte en "interrupted" (appel, Siri) : on relance au prochain toucher
+  ['touchend', 'click'].forEach(ev => document.addEventListener(ev, () => { if (ctx && ctx.state !== 'running' && !document.hidden) ctx.resume(); }, { passive: true }));
 
   return { init, music, muffle, ambience, play, ring, setVolume, vol, get mood() { return moodName; } };
 })();

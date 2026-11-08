@@ -47,7 +47,7 @@
       <input type="text" id="in-name" maxlength="14" value="Hugo" autocomplete="off">
       <p class="small">Ton personnage est écrit au masculin.</p>
       <button class="btn" id="go-new" style="background:linear-gradient(135deg,#ff5d8f,#7c6cff);border:none;font-weight:600">Commencer</button>`, root => {
-      const inp = root.querySelector('#in-name'); inp.focus(); inp.select();
+      const inp = root.querySelector('#in-name'); if (!matchMedia('(pointer: coarse)').matches) { inp.focus(); inp.select(); }
       const go = () => {
         const name = (inp.value || 'Hugo').trim().replace(/[<>]/g, '') || 'Hugo';
         closePanel(); showGame();
@@ -55,7 +55,8 @@
         startFrom('c1', newState(name.charAt(0).toUpperCase() + name.slice(1)));
       };
       root.querySelector('#go-new').onclick = go;
-      inp.onkeydown = e => { if (e.key === 'Enter') go(); };
+      inp.onkeydown = e => { if (e.key === 'Enter') { inp.blur(); go(); } };
+      inp.setAttribute('enterkeyhint', 'go'); inp.setAttribute('autocapitalize', 'words');
     });
   }
 
@@ -207,6 +208,16 @@
   });
 
   refreshMenu();
+
+  /* ---------- iPhone ---------- */
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const standalone = window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
+  if (isIOS && !standalone) $('#ios-hint').classList.add('show');
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http') && !G.auto) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+  // Toucher n'importe où dans le fil fait avancer les cartes de narration / appels
+  ['touchstart', 'mousedown'].forEach(ev => document.addEventListener(ev, () => SND.init(), { once: true, passive: true }));
 
   if (G.auto) {
     showGame();

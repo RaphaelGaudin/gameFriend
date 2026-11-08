@@ -1,8 +1,6 @@
 # Photos des personnages
 
-Photos actuelles : Inès, Sam, Léa, Max et Nora ont été fournies par l'auteur du jeu ;
-Maman, Philippe Moreau et M. Vasseur sont des visages générés par IA (thispersondoesnotexist.com,
-usage non commercial).
+Photos actuelles : fournies par l'auteur du jeu.
 
 Pour les changer, remplace les fichiers en gardant les mêmes noms.
 

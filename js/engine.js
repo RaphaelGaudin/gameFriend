@@ -314,6 +314,7 @@ function toast(t, ms = 2800) {
 /* ---------------- MODES ---------------- */
 function setMode(m) {
   G.mode = m;
+  $('#game').dataset.mode = m;
   $('#chatview').classList.toggle('hidden', !(m === 'chat'));
   $('#lockview').classList.toggle('hidden', m !== 'lock');
   $('#callview').classList.toggle('hidden', m !== 'call');
@@ -870,7 +871,7 @@ function startFrom(node, st) {
   G.runId++;
   const id = G.runId;
   G.st = st;
-  G.ff = false; $('#tb-ff').classList.remove('on');
+  G.ff = false; $('#tb-ff').classList.remove('on'); $('#hb-ff').classList.remove('on');
   $('#endscreen').classList.add('hidden'); $('#recap').classList.add('hidden'); $('#chapcard').classList.add('hidden');
   $('#choices').innerHTML = ''; $('#scene-choices').innerHTML = '';
   closeNar(); setMode('chat');

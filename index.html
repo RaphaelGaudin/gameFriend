@@ -57,17 +57,24 @@
       <div id="chatview" class="view">
         <header id="chathead">
           <button id="btn-list" title="Conversations">‹<span id="unread-total"></span></button>
-          <div class="avatar" id="head-avatar"></div>
-          <div class="headinfo">
-            <div id="head-name"></div>
-            <div id="head-status"></div>
+          <div class="head-center" id="head-center">
+            <div class="avatar" id="head-avatar"></div>
+            <div class="headinfo">
+              <div id="head-name"></div>
+              <div id="head-status"></div>
+            </div>
           </div>
           <div id="head-rel"></div>
+          <div class="head-actions">
+            <button id="hb-ff" title="Avance rapide" aria-label="Avance rapide"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M3 6l8 6-8 6zM12 6l8 6-8 6z" fill="currentColor"/></svg></button>
+            <button id="hb-menu" title="Menu" aria-label="Menu"><svg viewBox="0 0 24 24" width="22" height="22"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg></button>
+          </div>
         </header>
         <div id="thread"></div>
         <div id="inputbar">
+          <div id="plusbtn" aria-hidden="true">+</div>
           <div id="inputtext" class="ph">Message</div>
-          <button id="sendbtn">➤</button>
+          <button id="sendbtn" aria-label="Envoyer">↑</button>
         </div>
       </div>
 

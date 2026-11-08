@@ -209,20 +209,6 @@
 
   refreshMenu();
 
-  /* ---------- Photos des personnages ----------
-     Une photo déposée dans img/photos/<id>.jpg (ou .png / .webp) remplace le portrait illustré. */
-  Object.keys(CONTACTS).forEach(id => {
-    if (!CONTACTS[id].photo) return;
-    const tryExt = exts => {
-      if (!exts.length) return;
-      const src = `img/photos/${id}.${exts[0]}`, im = new Image();
-      im.onload = () => { CONTACTS[id].photo = src; CONTACTS[id].real = true; };
-      im.onerror = () => tryExt(exts.slice(1));
-      im.src = src;
-    };
-    tryExt(['jpg', 'png', 'webp']);
-  });
-
   /* ---------- iPhone ---------- */
   const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   const standalone = window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;

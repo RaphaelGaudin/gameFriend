@@ -1,8 +1,10 @@
 // Service worker : le jeu fonctionne hors ligne une fois ouvert une première fois.
-const CACHE = 'lu2312-v2';
+const CACHE = 'lu2312-v3';
 const FILES = ['./', 'index.html', 'style.css', 'manifest.webmanifest',
   'js/audio.js', 'js/engine.js', 'js/main.js',
   'story/ch01-03.js', 'story/ch04-06.js', 'story/ch07-08.js', 'story/ch09-10.js', 'story/endings.js',
+  'img/photos/ines.jpg', 'img/photos/sam.jpg', 'img/photos/lea.jpg', 'img/photos/max.jpg',
+  'img/photos/nora.jpg', 'img/photos/maman.jpg', 'img/photos/papa.jpg', 'img/photos/vasseur.jpg',
   'img/avatars/ines.svg', 'img/avatars/sam.svg', 'img/avatars/lea.svg', 'img/avatars/max.svg',
   'img/avatars/nora.svg', 'img/avatars/maman.svg', 'img/avatars/papa.svg', 'img/avatars/vasseur.svg',
   'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png'];

@@ -1,5 +1,10 @@
 # Photos des personnages
 
+Les photos fournies sont des visages générés par IA (thispersondoesnotexist.com) :
+ces personnes n'existent pas. Usage personnel / non commercial.
+
+Pour les changer, remplace les fichiers en gardant les mêmes noms.
+
 Dépose ici une photo par personnage, au format carré de préférence (au moins 400 × 400 px),
 avec exactement ces noms :
 
@@ -14,7 +19,7 @@ avec exactement ces noms :
 | `papa.jpg`    | Philippe Moreau, le père d'Inès (55 ans) |
 | `vasseur.jpg` | M. Vasseur, le prof (60 ans)            |
 
-`.png` et `.webp` marchent aussi. S'il manque une photo, le jeu utilise le portrait illustré
+S'il manque une photo, le jeu utilise le portrait illustré
 de `img/avatars/`. Le visage doit être centré : il est affiché dans un cercle.
 
 N'utilise que des photos dont tu as les droits (les tiennes, des images générées par IA,

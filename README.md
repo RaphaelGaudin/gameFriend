@@ -35,6 +35,7 @@ Sur iOS 16 et avant, coupe le mode silencieux pour entendre le son.
 - **Brouillons** : certains messages s'écrivent dans la barre de saisie, puis c'est à toi de choisir entre *Envoyer* et *Effacer*
 - **Écran verrouillé et appels** : un appel à 2h47 du matin, tu décroches ou pas
 - **Scènes « vraie vie »** façon visual novel : café, soirée, balcon, hôpital, neige… avec décors, particules et ambiances sonores
+- **Photos des personnages** dans les conversations, les notifications, les appels et les scènes (visages générés par IA de personnes qui n'existent pas, remplaçables dans `img/photos/`)
 - **Récap** à la fin de chaque chapitre, **carnet** de relation consultable à tout moment
 - **Sauvegarde automatique** à chaque chapitre, **sélection de chapitre** et **galerie des fins**
 - Options : volume musique / effets, vitesse du texte, avance rapide (`F`), raccourcis clavier (`Espace`, `1` à `4`)

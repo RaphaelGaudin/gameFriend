@@ -308,7 +308,7 @@ STORY.c2_party = [
   { sfx: 'door', muffle: false },
   "~ La porte s'ouvre. Chaleur, rires, guirlandes lumineuses. Et Inès, robe noire, rouge à lèvres, un verre dans chaque main.",
   "ines: Tu es là ! Tiens, c'est pour toi. Ne demande pas ce qu'il y a dedans.",
-  "~ Derrière elle, une fille aux cheveux décolorés te détaille de haut en bas.",
+  "~ Derrière elle, une fille aux cheveux blond cendré te détaille de haut en bas.",
   "lea: Ah. C'est toi, le fameux {nom}.",
   "lea: Inès parle de toi tout le temps. Genre TOUT le temps.",
   "ines: LÉA.",
@@ -493,7 +493,7 @@ STORY.c3 = [
   "nora: Parce que personne ne remarque un bon bruitage. Mais tout le monde remarque quand il manque.",
   "nora: C'est un peu triste, non ? Être essentiel et invisible.",
   { c: [
-    { t: "J'ai l'impression que tu parles pas que de bruitage.", fx: { nora: 2 }, set: 'nora_deep', then: ["~ Elle te regarde par-dessus ses lunettes, surprise.", "nora: T'es plus malin que t'en as l'air, binôme."] },
+    { t: "J'ai l'impression que tu parles pas que de bruitage.", fx: { nora: 2 }, set: 'nora_deep', then: ["~ Elle relève la tête de sa console, surprise.", "nora: T'es plus malin que t'en as l'air, binôme."] },
     { t: "Moi je trouve ça beau. Les gens ressentent sans savoir pourquoi.", fx: { nora: 1 } },
     { t: "Je connais. Je suis le meilleur ami officiel de quelqu'un.", fx: { nora: 1, fz: 1 }, then: ["nora: Aïe. Le bruitage de l'amitié. Je compatis."] },
   ] },

@@ -8,14 +8,14 @@ const ENDINGS = {};        // fins                 { id: {...} }
 const CHAPTERS = [];       // liste des chapitres  [{n,node,title,sub}]
 
 const CONTACTS = {
-  ines:   { name: 'Inès',   color: '#ff6b8b', emoji: '🌙', photo: 'img/avatars/ines.svg' },
-  sam:    { name: 'Sam',    color: '#3fb6f0', emoji: '🦝', photo: 'img/avatars/sam.svg' },
-  lea:    { name: 'Léa',    color: '#ffb547', emoji: '🌻', photo: 'img/avatars/lea.svg' },
-  max:    { name: 'Maxime', color: '#9d7bff', emoji: '🎧', photo: 'img/avatars/max.svg' },
-  nora:   { name: 'Nora',   color: '#62c98a', emoji: '🎞️', photo: 'img/avatars/nora.svg' },
-  maman:  { name: 'Maman',  color: '#f08bb4', emoji: '🏡', photo: 'img/avatars/maman.svg' },
-  papa:   { name: 'M. Moreau', color: '#b0a089', emoji: '🧔', photo: 'img/avatars/papa.svg' },
-  vasseur:{ name: 'M. Vasseur', color: '#8f9bb3', emoji: '🎓', photo: 'img/avatars/vasseur.svg' },
+  ines:   { name: 'Inès',   color: '#ff6b8b', emoji: '🌙', photo: 'img/photos/ines.jpg', art: 'img/avatars/ines.svg' },
+  sam:    { name: 'Sam',    color: '#3fb6f0', emoji: '🦝', photo: 'img/photos/sam.jpg', art: 'img/avatars/sam.svg' },
+  lea:    { name: 'Léa',    color: '#ffb547', emoji: '🌻', photo: 'img/photos/lea.jpg', art: 'img/avatars/lea.svg' },
+  max:    { name: 'Maxime', color: '#9d7bff', emoji: '🎧', photo: 'img/photos/max.jpg', art: 'img/avatars/max.svg' },
+  nora:   { name: 'Nora',   color: '#62c98a', emoji: '🎞️', photo: 'img/photos/nora.jpg', art: 'img/avatars/nora.svg' },
+  maman:  { name: 'Maman',  color: '#f08bb4', emoji: '🏡', photo: 'img/photos/maman.jpg', art: 'img/avatars/maman.svg' },
+  papa:   { name: 'M. Moreau', color: '#b0a089', emoji: '🧔', photo: 'img/photos/papa.jpg', art: 'img/avatars/papa.svg' },
+  vasseur:{ name: 'M. Vasseur', color: '#8f9bb3', emoji: '🎓', photo: 'img/photos/vasseur.jpg', art: 'img/avatars/vasseur.svg' },
   groupe: { name: 'Crémaillère 🏠', color: '#5b5470', emoji: '🏠', group: true },
   anniv:  { name: 'Anniv Inès 🎂', color: '#5b5470', emoji: '🎂', group: true },
   me:     { name: 'Moi', color: '#7c6cff', emoji: '🙂' },
@@ -166,7 +166,8 @@ function setAvatar(node, id) {
   if (c.photo) {
     node.innerHTML = '';
     const img = new Image(); img.src = c.photo; img.alt = c.name; img.draggable = false;
-    img.onerror = () => { node.textContent = c.emoji; };
+    // photo absente → portrait illustré → emoji
+    img.onerror = () => { if (c.art && img.src.indexOf(c.art) < 0) img.src = c.art; else node.textContent = c.emoji; };
     node.appendChild(img);
   } else node.textContent = c.emoji;
 }

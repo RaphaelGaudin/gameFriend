@@ -8,14 +8,14 @@ const ENDINGS = {};        // fins                 { id: {...} }
 const CHAPTERS = [];       // liste des chapitres  [{n,node,title,sub}]
 
 const CONTACTS = {
-  ines:   { name: 'Inès',   color: '#ff6b8b', emoji: '🌙' },
-  sam:    { name: 'Sam',    color: '#3fb6f0', emoji: '🦝' },
-  lea:    { name: 'Léa',    color: '#ffb547', emoji: '🌻' },
-  max:    { name: 'Maxime', color: '#9d7bff', emoji: '🎧' },
-  nora:   { name: 'Nora',   color: '#62c98a', emoji: '🎞️' },
-  maman:  { name: 'Maman',  color: '#f08bb4', emoji: '🏡' },
-  papa:   { name: 'M. Moreau', color: '#b0a089', emoji: '🧔' },
-  vasseur:{ name: 'M. Vasseur', color: '#8f9bb3', emoji: '🎓' },
+  ines:   { name: 'Inès',   color: '#ff6b8b', emoji: '🌙', photo: 'img/avatars/ines.svg' },
+  sam:    { name: 'Sam',    color: '#3fb6f0', emoji: '🦝', photo: 'img/avatars/sam.svg' },
+  lea:    { name: 'Léa',    color: '#ffb547', emoji: '🌻', photo: 'img/avatars/lea.svg' },
+  max:    { name: 'Maxime', color: '#9d7bff', emoji: '🎧', photo: 'img/avatars/max.svg' },
+  nora:   { name: 'Nora',   color: '#62c98a', emoji: '🎞️', photo: 'img/avatars/nora.svg' },
+  maman:  { name: 'Maman',  color: '#f08bb4', emoji: '🏡', photo: 'img/avatars/maman.svg' },
+  papa:   { name: 'M. Moreau', color: '#b0a089', emoji: '🧔', photo: 'img/avatars/papa.svg' },
+  vasseur:{ name: 'M. Vasseur', color: '#8f9bb3', emoji: '🎓', photo: 'img/avatars/vasseur.svg' },
   groupe: { name: 'Crémaillère 🏠', color: '#5b5470', emoji: '🏠', group: true },
   anniv:  { name: 'Anniv Inès 🎂', color: '#5b5470', emoji: '🎂', group: true },
   me:     { name: 'Moi', color: '#7c6cff', emoji: '🙂' },
@@ -156,13 +156,32 @@ function updateRel() {
 
 /* ---------------- RENDU MESSAGES ---------------- */
 function avatarEl(id, cls = 'avatar') {
-  const c = CONTACTS[id] || CONTACTS.me;
-  const a = el('div', cls); a.style.background = c.color + '33'; a.style.border = `1.5px solid ${c.color}`; a.textContent = c.emoji;
+  const a = el('div', cls);
+  setAvatar(a, id);
   return a;
 }
 function setAvatar(node, id) {
   const c = CONTACTS[id] || CONTACTS.me;
-  node.style.background = c.color + '33'; node.style.border = `1.5px solid ${c.color}`; node.textContent = c.emoji;
+  node.style.background = c.color + '33'; node.style.border = `1.5px solid ${c.color}`;
+  if (c.photo) {
+    node.innerHTML = '';
+    const img = new Image(); img.src = c.photo; img.alt = c.name; img.draggable = false;
+    img.onerror = () => { node.textContent = c.emoji; };
+    node.appendChild(img);
+  } else node.textContent = c.emoji;
+}
+/* Les messages reçus sont accompagnés de la photo de l'expéditeur (sur le dernier d'une série). */
+function rowEl(msgNode, msg) {
+  if (msg.who === 'me' || msg.who === 'sys') return msgNode;
+  const row = el('div', 'row');
+  row.dataset.who = msg.who;
+  row.appendChild(avatarEl(msg.who, 'avatar mini'));
+  row.appendChild(msgNode);
+  return row;
+}
+function hidePrevMini(container, who) {
+  const last = container.lastElementChild;
+  if (last && last.classList.contains('row') && last.dataset.who === who) last.querySelector('.mini').style.visibility = 'hidden';
 }
 const onlyEmoji = t => /^(\p{Extended_Pictographic}|‍|️|\s){1,10}$/u.test(t);
 
@@ -207,7 +226,8 @@ function renderThread(container, convId, live) {
   let prev = null;
   msgs.forEach((m, i) => {
     if (prev && prev.who !== m.who && m.who !== 'sys') container.appendChild(el('div', 'msg-gap'));
-    container.appendChild(msgEl(m, convId));
+    else if (prev) hidePrevMini(container, m.who);
+    container.appendChild(rowEl(msgEl(m, convId), m));
     prev = m;
   });
   if (live) renderReceipt();
@@ -247,7 +267,8 @@ function appendLive(convId, msg) {
   const msgs = G.st.convos[convId];
   const prev = msgs[msgs.length - 2];
   if (prev && prev.who !== msg.who && msg.who !== 'sys' && prev.cls !== 'date') th.appendChild(el('div', 'msg-gap'));
-  th.appendChild(msgEl(msg, convId));
+  else hidePrevMini(th, msg.who);
+  th.appendChild(rowEl(msgEl(msg, convId), msg));
   renderReceipt();
   scrollBottom();
 }
@@ -317,6 +338,18 @@ function openConv(id) {
 function choiceContainer() { return G.mode === 'scene' ? $('#scene-choices') : $('#choices'); }
 const isAct = o => (o.act ?? /^\[/.test(o.t));
 
+/* Les choix recouvrent le bas du fil : on réserve la place et on remonte les derniers messages. */
+function reserveThread(box) {
+  if (G.mode !== 'chat') return;
+  requestAnimationFrame(() => {
+    const th = $('#thread');
+    const overlap = th.getBoundingClientRect().bottom - box.getBoundingClientRect().top;
+    th.style.paddingBottom = (12 + Math.max(0, overlap)) + 'px';
+    th.scrollTop = th.scrollHeight;
+  });
+}
+function releaseThread() { $('#thread').style.paddingBottom = ''; }
+
 function showChoices(step) {
   return new Promise(resolve => {
     const opts = step.c.filter(o => !o.req || o.req(V()));
@@ -329,6 +362,7 @@ function showChoices(step) {
       clearTimeout(timerId); clearInterval(beatId);
       document.removeEventListener('keydown', keyH);
       box.innerHTML = '';
+      releaseThread();
       $('#callview').classList.remove('choosing');
       if (G.mode === 'scene') $('#dialog').classList.remove('lifted');
       sfx('choice');
@@ -354,6 +388,7 @@ function showChoices(step) {
     });
     document.addEventListener('keydown', keyH);
     if (G.mode === 'call') $('#callview').classList.add('choosing');
+    reserveThread(box);
     if (G.mode === 'scene') {
       requestAnimationFrame(() => {
         $('#dialog').style.setProperty('--lift', (box.offsetHeight + 10) + 'px');
@@ -370,7 +405,7 @@ function draftButtons(timer) {
     box.innerHTML = '';
     box.classList.add('drafting');
     let done = false, tid = null;
-    const finish = v => { if (done) return; done = true; clearTimeout(tid); box.innerHTML = ''; box.classList.remove('drafting'); resolve(v); };
+    const finish = v => { if (done) return; done = true; clearTimeout(tid); box.innerHTML = ''; box.classList.remove('drafting'); releaseThread(); resolve(v); };
     if (timer) {
       const tb = el('div', 'timerbar'); const bar = el('i'); tb.appendChild(bar); box.appendChild(tb);
       bar.style.transition = `transform ${timer * 1000}ms linear`;
@@ -381,6 +416,7 @@ function draftButtons(timer) {
     const er = el('button', 'erase', '⌫ Effacer'); const se = el('button', 'send', 'Envoyer ➤');
     er.onclick = () => finish(false); se.onclick = () => finish(true);
     row.appendChild(er); row.appendChild(se); box.appendChild(row);
+    reserveThread(box);
     if (G.auto) setTimeout(() => finish(G.rng() < .5), 0);
   });
 }
@@ -472,6 +508,7 @@ async function exec(s, id) {
     const text = fmt(s.nar);
     if (G.mode === 'scene') {
       $('#speaker').textContent = '';
+      showPortrait(null);
       const ln = $('#line'); ln.className = 'narr';
       await typeText(ln, text);
       await waitAdvance();
@@ -583,6 +620,7 @@ async function exec(s, id) {
     $('#scene-loc').textContent = s.loc || '';
     $('#scene-loc').style.display = s.loc ? '' : 'none';
     $('#speaker').textContent = ''; $('#line').textContent = ''; $('#line').className = '';
+    showPortrait(null); $('#portrait').dataset.who = '';
     particles(s.fx2 || s.particles);
     $('#scene').style.animation = 'none'; void $('#scene').offsetWidth; $('#scene').style.animation = '';
     await sleep(900);
@@ -626,7 +664,9 @@ async function exec(s, id) {
 
 function showTyping(who) {
   const th = $('#thread');
-  const tb = el('div', 'typing-bubble', '<i></i><i></i><i></i>');
+  const tb = el('div', 'row typing-row');
+  tb.appendChild(avatarEl(who, 'avatar mini'));
+  tb.appendChild(el('div', 'typing-bubble', '<i></i><i></i><i></i>'));
   th.appendChild(tb); scrollBottom();
   const hs = $('#head-status'); hs.textContent = 'écrit…'; hs.className = 'typing';
   return tb;
@@ -655,6 +695,7 @@ async function execMsg(s) {
   if (G.mode === 'scene') {
     const c = CONTACTS[who];
     const sp = $('#speaker'); sp.textContent = c.name; sp.style.color = c.color;
+    showPortrait(who);
     const ln = $('#line'); ln.className = '';
     await typeText(ln, text);
     await waitAdvance();
@@ -700,8 +741,20 @@ async function execMsg(s) {
   return null;
 }
 
+function showPortrait(who) {
+  const p = $('#portrait');
+  if (!who || !CONTACTS[who] || !CONTACTS[who].photo) { p.classList.add('gone'); return; }
+  if (p.dataset.who !== who) {
+    setAvatar(p, who); p.dataset.who = who;
+    p.style.animation = 'none'; void p.offsetWidth; p.style.animation = '';
+  }
+  p.style.setProperty('--pc', CONTACTS[who].color);
+  p.classList.remove('gone');
+}
+
 async function execMe(text) {
   if (G.mode === 'scene') {
+    showPortrait(null);
     const sp = $('#speaker'); sp.textContent = G.st.name; sp.style.color = '#a99cff';
     const ln = $('#line'); ln.className = 'me';
     await typeText(ln, text);

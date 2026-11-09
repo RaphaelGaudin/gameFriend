@@ -281,6 +281,7 @@ function appendLive(convId, msg) {
   if (prev && prev.who !== msg.who && msg.who !== 'sys' && prev.cls !== 'date') th.appendChild(el('div', 'msg-gap'));
   else hidePrevMini(th, msg.who);
   th.appendChild(rowEl(msgEl(msg, convId), msg));
+  if (msg.who !== 'sys') markShown(msg.img ? 30 : msg.who === 'me' ? Math.round((msg.t || '').length / 2) : (msg.t || '').length);
   renderReceipt();
   scrollBottom();
 }
@@ -493,7 +494,23 @@ async function play(node, id) {
 }
 
 const MAIN = ['go','if','ch','recap','end','open','lock','unlock','call','pickup','hangup','missed','scene','endscene','seen','typing','sys','m','me','c'];
+/* Pause de lecture : avant une transition (autre conversation, scène, narration, fin de chapitre…),
+   on laisse le temps de lire le dernier message affiché, selon sa longueur. */
+function markShown(len) { G.lastShown = { at: performance.now(), len: len || 0 }; }
+async function readPause(s) {
+  if (!G.lastShown || G.auto) return;
+  const isTransition = (s.open && s.open !== G.st.current) || s.scene || s.ch || s.recap || s.lock || s.call || s.end
+    || (s.unlock && G.mode !== 'lock') || ('nar' in s && !G.narOpen && (G.mode === 'chat' || G.mode === 'lock'));
+  if (!isTransition) return;
+  const need = clamp(1300 + G.lastShown.len * 45, 1600, 5000) * speedK();
+  const elapsed = performance.now() - G.lastShown.at;
+  G.lastShown = null;
+  if (need > elapsed) await sleepRaw(need - elapsed);
+}
+
 async function exec(s, id) {
+  await readPause(s);
+  guard(id);
   if (G.narOpen && MAIN.some(k => k in s) && !('nar' in s)) closeNar();
 
   // ---- effets de bord (combinables avec une étape principale) ----
@@ -697,6 +714,7 @@ function addNotif(conv, text, missed) {
   b.innerHTML = `<div class="n-top">${esc(CONTACTS[conv].name)}<span>${esc(G.st.time)}</span></div><div class="n-text">${esc(text)}</div>`;
   n.appendChild(b);
   const box = $('#notifs'); box.appendChild(n);
+  markShown(text.length);
   while (box.children.length > 5) box.firstChild.remove();
 }
 
@@ -884,6 +902,7 @@ function startFrom(node, st) {
   G.runId++;
   const id = G.runId;
   G.st = st;
+  G.lastShown = null;
   G.ff = false; $('#tb-ff').classList.remove('on'); $('#hb-ff').classList.remove('on');
   $('#endscreen').classList.add('hidden'); $('#recap').classList.add('hidden'); $('#chapcard').classList.add('hidden');
   $('#choices').innerHTML = ''; $('#scene-choices').innerHTML = '';

@@ -766,10 +766,10 @@ async function execMsg(s) {
 function showPortrait(who) {
   const p = $('#portrait');
   if (!who || !CONTACTS[who] || !CONTACTS[who].photo) { p.classList.add('gone'); return; }
-  if (p.dataset.who !== who) {
-    setAvatar(p, who); p.dataset.who = who;
-    p.style.animation = 'none'; void p.offsetWidth; p.style.animation = '';
-  }
+  const wasHidden = p.classList.contains('gone');
+  if (p.dataset.who !== who) { setAvatar(p, who); p.dataset.who = who; }
+  if (wasHidden || p.dataset.shown !== who) { p.style.animation = 'none'; void p.offsetWidth; p.style.animation = ''; }
+  p.dataset.shown = who;
   p.style.setProperty('--pc', CONTACTS[who].color);
   p.classList.remove('gone');
 }

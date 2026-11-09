@@ -180,7 +180,7 @@ STORY.c9_wait = [
   ], prompt: 'Jour 3 sans nouvelles' },
   { day: 'Mercredi 8 janvier', time: '01:12' },
   "~ 1h12 du matin. Tu n'arrives pas à dormir. Tu vois qu'elle a posté une story.",
-  { m: 'ines', t: "Story · « nuit blanche, encore »", img: { e: '📐', bg: 'linear-gradient(135deg,#283048,#859398)' }, in: 'ines' },
+  { m: 'ines', t: "Story · « nuit blanche, encore »", img: { src: 'img/scenes/nuit-blanche.jpg', tall: true, e: '📐', bg: 'linear-gradient(135deg,#283048,#859398)' }, in: 'ines' },
   { c: [
     { t: "Toi aussi tu dors pas ?", fx: { jal: 0 }, then: [{ wait: 1500 }, "ines: non. bonne nuit {nom}", "~ Trois mots. C'est déjà ça."] },
     { t: "Tu postes des stories mais tu me réponds pas ?", fx: { jal: 2, conf: -1 }, set: { spam2: true }, then: [{ seen: 'ines' }, { wait: 2000 }, "ines: s'il te plaît. j'ai demandé du temps."] },
@@ -564,7 +564,7 @@ STORY.c10_ghost = [
   { day: 'Vendredi 14 février', time: '21:40' },
   "~ 14 février. Tu n'as pas reçu d'invitation. Tu l'apprends en faisant défiler les stories, au fond de ton lit.",
   { open: 'ines' },
-  { m: 'ines', t: "Story · « vernissage 🥂 merci à tous ceux qui étaient là »", img: { e: '🏛️', bg: 'linear-gradient(135deg,#efe4cf,#9b8a6b)' }, fast: true },
+  { m: 'ines', t: "Story · « vernissage 🥂 merci à tous ceux qui étaient là »", img: { src: 'img/scenes/vernissage.jpg', tall: true, e: '🏛️', bg: 'linear-gradient(135deg,#efe4cf,#9b8a6b)' }, fast: true },
   "~ Sur la photo, Léa, Sam, des gens de son école. Sa maquette, avec les fenêtres rondes.",
   "~ Tu n'es pas sur la photo. Tu n'étais pas là. Elle ne t'a pas demandé d'y être.",
   { c: [
@@ -614,7 +614,7 @@ STORY.end_love = [
   { unlock: 'ines' },
   "> Tu es à côté de moi, Inès.",
   "ines: je sais. je voulais juste t'écrire ça. à 23h12. pour la tradition",
-  { m: 'ines', t: "", img: { e: '🌙', bg: 'linear-gradient(135deg,#1c1640,#ff6b8b)' } },
+  { m: 'ines', t: "", img: { src: 'img/scenes/lune.jpg', e: '🌙', bg: 'linear-gradient(135deg,#1c1640,#ff6b8b)' } },
   { end: 'E1' },
 ];
 

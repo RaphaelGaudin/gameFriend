@@ -450,7 +450,7 @@ STORY.c5_end = [
     { if: v => !v.confessed_early && !v.sabotage, then: [
       "ines: t'es parti tôt hier ?",
       "ines: je t'ai cherché pour la photo de groupe",
-      { m: 'ines', t: "on dirait une pub pour un dentifrice gothique 😂", img: { e: '🧛', bg: 'linear-gradient(135deg,#2b1640,#7c1d3a)' } },
+      { m: 'ines', t: "on dirait une pub pour un dentifrice gothique 😂", img: { src: 'img/scenes/halloween.jpg', e: '🧛', bg: 'linear-gradient(135deg,#2b1640,#7c1d3a)' } },
       { c: [
         { t: "Bravo pour Max. Vraiment.", fx: { fz: 1 }, then: ["ines: merci ❤ ça compte que tu le dises"] },
         { t: "J'étais crevé. Tu étais très belle en tout cas.", fx: { aff: 1 }, then: ["ines: arrête 🙈"] },

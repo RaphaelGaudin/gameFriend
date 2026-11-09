@@ -1,5 +1,5 @@
 // Service worker : le jeu fonctionne hors ligne une fois ouvert une première fois.
-const CACHE = 'lu2312-v11';
+const CACHE = 'lu2312-v12';
 const FILES = ['./', 'index.html', 'style.css', 'manifest.webmanifest',
   'js/audio.js', 'js/engine.js', 'js/main.js',
   'story/ch01-03.js', 'story/ch04-06.js', 'story/ch07-08.js', 'story/ch09-10.js', 'story/endings.js',

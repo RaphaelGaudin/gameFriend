@@ -198,8 +198,14 @@ function msgEl(msg, convId) {
     d.appendChild(el('div', 'who', esc(c.name))).style.color = c.color;
   }
   if (msg.img) {
-    const p = el('div', 'photo'); p.style.background = msg.img.bg || 'linear-gradient(135deg,#444,#222)';
+    const p = el('div', 'photo' + (msg.img.tall ? ' tall' : '')); p.style.background = msg.img.bg || 'linear-gradient(135deg,#444,#222)';
     p.appendChild(document.createTextNode(msg.img.e || '📷'));
+    if (msg.img.src) {
+      // vraie photo (img/scenes/…) ; si le fichier manque, on garde l'emoji
+      const im = new Image(); im.alt = ''; im.draggable = false;
+      im.onload = () => { p.textContent = ''; p.classList.add('real'); p.appendChild(im); if (p.closest('#thread')) scrollBottom(); };
+      im.src = msg.img.src;
+    }
     d.appendChild(p);
     if (msg.t) d.appendChild(el('div', 'photo-cap', esc(msg.t)));
     d.style.padding = '6px 6px 9px';

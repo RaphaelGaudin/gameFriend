@@ -251,7 +251,12 @@ function renderReceipt() {
   }
 }
 
-function scrollBottom() { const th = $('#thread'); th.scrollTop = th.scrollHeight; }
+// Toujours coller en bas du fil, immédiatement, puis une seconde fois après le rendu (images, polices)
+function scrollBottom() {
+  const th = $('#thread');
+  th.scrollTop = th.scrollHeight;
+  requestAnimationFrame(() => { th.scrollTop = th.scrollHeight; });
+}
 
 function pushMsg(convId, msg) {
   const c = G.st.convos[convId] = G.st.convos[convId] || [];
@@ -338,6 +343,7 @@ function openConv(id) {
   G.st.unread[id] = 0;
   updateHeader();
   renderThread($('#thread'), id, true);
+  scrollBottom();
   const th = $('#thread');
   th.style.animation = 'none'; void th.offsetWidth; th.style.animation = 'fadein .35s both';
 }

@@ -816,6 +816,7 @@ async function execChoice(s, id) {
   } else if (!isAct(o) && !o.silent) {
     if (G.mode === 'chat') { await typeInInput(say); await sleep(150); await sendMe(say); }
     else if (G.mode === 'scene') {
+      showPortrait(null);
       const sp = $('#speaker'); sp.textContent = G.st.name; sp.style.color = '#a99cff';
       const ln = $('#line'); ln.className = 'me'; ln.textContent = say;
       await sleep(700 + say.length * 22);
